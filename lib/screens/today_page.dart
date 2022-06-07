@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/core/response.dart';
 import 'package:news_app/theme/custom_theme.dart';
-
 import '../model/article.dart';
 
 class TodayPage extends StatefulWidget {
@@ -11,20 +10,23 @@ class TodayPage extends StatefulWidget {
   State<TodayPage> createState() => _MainPageState();
 }
 
-String _urlPath = "assets/trt.png";
+String _mainHaber =
+    "https://w7.pngwing.com/pngs/944/233/png-transparent-newspaper-computer-icons-world-news-newspaper-display-advertising-news-article-newspaper-extra.png";
 
 class _MainPageState extends State<TodayPage> with TickerProviderStateMixin {
-  List<Articles>? articles = [];
+  List<ArticleModel> articles = <ArticleModel>[];
+
+  getNews() async {
+    News newsClass = News();
+    await newsClass.getNews();
+    articles = newsClass.news;
+    setState(() {});
+  }
 
   @override
   void initState() {
-    NewsService.getNews().then((value) => {
-          setState(() {
-            articles = value;
-          })
-        });
-
     super.initState();
+    getNews();
   }
 
   @override
@@ -47,19 +49,19 @@ class _MainPageState extends State<TodayPage> with TickerProviderStateMixin {
               height: MediaQuery.of(context).size.height * 0.38,
               child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: articles!.length,
+                  itemCount: articles.length,
                   shrinkWrap: true,
                   itemExtent: 410,
                   itemBuilder: (BuildContext context, int index) {
                     return Card(
-                      elevation: 0,
+                      elevation: 10,
                       margin: AppTheme.marginAllApp,
                       clipBehavior: Clip.antiAlias,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20)),
                       child: Stack(children: [
                         Image.network(
-                          articles![index].urlToImage ?? _urlPath,
+                          articles[index].urlToImage!,
                           width: MediaQuery.of(context).size.width * 1,
                           height: MediaQuery.of(context).size.height * 0.23,
                           fit: BoxFit.fill,
@@ -85,17 +87,17 @@ class _MainPageState extends State<TodayPage> with TickerProviderStateMixin {
                               children: [
                                 Align(
                                   alignment: Alignment.bottomLeft,
-                                  child: Text(articles?[index].title ?? "",
+                                  child: Text(articles[index].title ?? "",
                                       maxLines: 1,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.bold)),
                                 ),
                                 Align(
                                   alignment: Alignment.bottomLeft,
-                                  child: Text(articles?[index].author ?? "",
+                                  child: Text(articles[index].author ?? "",
                                       maxLines: 1,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.bold)),
                                 ),
@@ -130,19 +132,19 @@ class _MainPageState extends State<TodayPage> with TickerProviderStateMixin {
               height: MediaQuery.of(context).size.height * 0.38,
               child: ListView.builder(
                   scrollDirection: Axis.vertical,
-                  itemCount: articles!.length,
+                  itemCount: articles.length,
                   shrinkWrap: true,
                   itemExtent: 270,
                   itemBuilder: (BuildContext context, int index) {
                     return Card(
-                      elevation: 0,
+                      elevation: 10,
                       margin: AppTheme.marginAllApp,
                       clipBehavior: Clip.antiAlias,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20)),
                       child: Stack(children: [
                         Image.network(
-                          articles![index].urlToImage ?? _urlPath,
+                          articles[index].urlToImage!,
                           width: MediaQuery.of(context).size.width * 1,
                           height: MediaQuery.of(context).size.height * 0.23,
                           fit: BoxFit.fill,
@@ -168,17 +170,17 @@ class _MainPageState extends State<TodayPage> with TickerProviderStateMixin {
                               children: [
                                 Align(
                                   alignment: Alignment.bottomLeft,
-                                  child: Text(articles?[index].title ?? "",
+                                  child: Text(articles[index].title ?? "",
                                       maxLines: 1,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.bold)),
                                 ),
                                 Align(
                                   alignment: Alignment.bottomLeft,
-                                  child: Text(articles?[index].author ?? "",
+                                  child: Text(articles[index].author ?? "",
                                       maxLines: 1,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.bold)),
                                 ),

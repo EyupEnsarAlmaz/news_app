@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:news_app/screens/audio_page.dart';
 import 'package:news_app/screens/news_page.dart';
 import 'package:news_app/screens/today_page.dart';
-import 'package:news_app/theme/custom_theme.dart';
 
 void main() {
   runApp(const MyApp());

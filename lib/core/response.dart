@@ -1,29 +1,31 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import '../model/article.dart';
 
-import 'package:news_app/model/article.dart';
+class News {
+  String mainHaber =
+      "https://w7.pngwing.com/pngs/944/233/png-transparent-newspaper-computer-icons-world-news-newspaper-display-advertising-news-article-newspaper-extra.png";
+  List<ArticleModel> news = [];
 
-import '../model/news.dart';
-
-class NewsService {
-  static NewsService _singleton = NewsService._internal();
-  NewsService._internal();
-
-  factory NewsService() {
-    return _singleton;
-  }
-
-  static Future<List<Articles>?> getNews() async {
+  Future<void> getNews() async {
     var url = Uri.parse(
         "https://newsapi.org/v2/top-headlines?country=tr&category=business&apiKey=23883a8fcdc34772a89045230260314c");
-
-    final response = await http.get(url);
-
-    if (response.body.isNotEmpty) {
-      final responseJson = json.decode(response.body);
-      News news = News.fromJson(responseJson);
-      return news.articles;
+    var response = await http.get(url);
+    var jsonData = jsonDecode(response.body);
+    if (jsonData['status'] == "ok") {
+      jsonData["articles"].forEach((element) {
+        if (element['urlToImage'] != null && element['description'] != null) {
+          ArticleModel article = ArticleModel(
+            author: element['author'],
+            title: element['title'],
+            description: element['description'],
+            urlToImage: element['urlToImage'],
+            content: element["content"],
+            articleUrl: element["url"],
+          );
+          news.add(article);
+        }
+      });
     }
-    return null;
   }
 }
